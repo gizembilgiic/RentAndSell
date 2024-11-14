@@ -6,15 +6,16 @@ using System.Reflection;
 
 namespace RentAndSell.Car
 {
-    public partial class Form1 : Form
+    public partial class CarPage : Form
     {
         private HttpClient _httpClient;
         private string _endpoint = "Cars";
-        public Form1()
+        public CarPage()
         {
             InitializeComponent();
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7027/api/");
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", Program.BasicAuth);
 
         }
 
@@ -100,7 +101,7 @@ namespace RentAndSell.Car
 
             string id = txtId.Text;
 
-            // https://localhost:7104/api/Cars/3 => Put
+            // https://localhost:7027/api/Cars/3 => Put
 
             HttpResponseMessage responseMessage = _httpClient.PostAsJsonAsync(_endpoint + $"/{id}", model).Result;
             if (responseMessage.IsSuccessStatusCode)
@@ -116,7 +117,7 @@ namespace RentAndSell.Car
         {
             string id = txtId.Text;
 
-            // https://localhost:7104/api/Cars/3 => Delete
+            // https://localhost:7027/api/Cars/3 => Delete
 
             HttpResponseMessage responseMessage = _httpClient.DeleteAsync(_endpoint + $"/{id}").Result;
             if (responseMessage.IsSuccessStatusCode)
@@ -143,7 +144,7 @@ namespace RentAndSell.Car
         {
             string carID = txtId.Text;
 
-            // https://localhost:7104/api/Cars/3 => Delete
+            // https://localhost:7027/api/Cars/3 => Delete
 
             ArabaViewModel model = _httpClient.GetFromJsonAsync<ArabaViewModel>(_endpoint + $"/{carID}").Result;
             if (model != null)

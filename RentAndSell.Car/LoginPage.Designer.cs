@@ -32,8 +32,8 @@
             txtSifre = new TextBox();
             btnKayitOl = new Button();
             groupBox1 = new GroupBox();
-            btnGiris = new Button();
             label1 = new Label();
+            btnGiris = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -76,6 +76,14 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "groupBox1";
             // 
+            // label1
+            // 
+            label1.Location = new Point(269, 42);
+            label1.Name = "label1";
+            label1.Size = new Size(233, 115);
+            label1.TabIndex = 2;
+            label1.Text = "Mesajlar";
+            // 
             // btnGiris
             // 
             btnGiris.Location = new Point(18, 120);
@@ -84,14 +92,7 @@
             btnGiris.TabIndex = 1;
             btnGiris.Text = "Giriş";
             btnGiris.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            label1.Location = new Point(269, 42);
-            label1.Name = "label1";
-            label1.Size = new Size(233, 115);
-            label1.TabIndex = 2;
-            label1.Text = "Mesajlar";
+            btnGiris.Click += btnGiris_Click;
             // 
             // LoginPage
             // 
