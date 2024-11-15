@@ -3,6 +3,7 @@ using RentAndSell.Car.WebApp;
 using RentAndSell.Car.WebApp.Models.Commons.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +19,7 @@ namespace RentAndSell.Car.WebApp.Models
         public YakitTuru YakitTuru { get; set; }
         public SanzimanTipi SanzimanTipi { get; set; }
 
-        //public int MotorTipi { get; set; }
-        //public int YakitTuru { get; set; }
-        //public int SanzimanTipi { get; set; }
-
+        [Range(1940,2024)]
         public short Yili { get; set; }
 
     }

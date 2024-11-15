@@ -7,7 +7,7 @@ using RentAndSell.Car.API.Data.Entities.Concrete;
 
 namespace RentAndSell.Car.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CarsController : ControllerBase
@@ -34,7 +34,7 @@ namespace RentAndSell.Car.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(Araba car)
+        public ActionResult Post([FromBody]Araba car)
         {
             //ArabaTarihce arabaTarihce = new ArabaTarihce();
             //arabaTarihce.Marka = car.Marka;

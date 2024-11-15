@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentAndSell.Car.API;
 using RentAndSell.Car.API.Data;
@@ -40,11 +42,62 @@ builder.Services.AddIdentity<Kullanici, IdentityRole>()
 //                }); 
 #endregion
 
+#region JWT Authentication Kodlarý
+
+    builder.Services.AddAuthentication(opt =>
+    {
+
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    })
+    .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = "CarApi",
+                        ValidAudience = "CarWeb",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("gizlikelime-þayet-bu-çok-gizlibirkelime")),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidateLifetime = true
+
+                    };
+                });
+//builder.Services.ConfigureApplicationCookie(opt =>
+//{
+//    opt.Events.OnRedirectToLogin = (context) =>
+//    {
+//        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+//        return Task.CompletedTask;
+//    };
+
+//    opt.Events.OnRedirectToAccessDenied = (context) =>
+//    {
+//        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+//        return Task.CompletedTask;
+//    };
+//});
+
+#endregion
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(p =>
+    {
+        p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+    });
+});
+
+
+
 builder.Services.AddControllers();
 
-builder.Services.AddSwaggerGen(opt=>
+builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Rent And Sell Car API", Version = ""});
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Rent And Sell Car API", Version = "" });
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -81,10 +134,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSwagger();
-app.UseSwaggerUI(s=>
+app.UseSwaggerUI(s =>
 {
     s.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger");
 });
+
+
+app.UseCors();
 
 app.MapControllers();
 

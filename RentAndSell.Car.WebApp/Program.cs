@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,10 +9,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();   
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthentication(opt =>
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(opt =>
+                {
+                    opt.LoginPath = "/Account/Login";
+                    opt.AccessDeniedPath = "/Account/AccessDenied";
+                });
+
+builder.Services.AddSession(opt =>
 {
-    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.Cookie.HttpOnly = true;
+    opt.Cookie.IsEssential = true;
+    //opt.Cookie.Expiration = TimeSpan.;
+
+    opt.IdleTimeout = TimeSpan.FromMinutes(60);
+    
 });
 
 var app = builder.Build();
@@ -28,6 +44,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
